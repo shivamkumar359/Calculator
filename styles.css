@@ -4,17 +4,16 @@
   --panel:#f4f4f4;
   --btn:#ffffff;
   --btn-op:#e6e6e6;
-  --text:#000000;
   --border:#cccccc;
 }
 
+/* DARK MODE VARIABLES */
 @media (prefers-color-scheme: dark){
   :root{
     --bg:#2b2b2b;
     --panel:#1f1f1f;
     --btn:#000000;
     --btn-op:#111111;
-    --text:#ffffff;
     --border:#333333;
   }
 }
@@ -25,7 +24,7 @@
   font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
 }
 
-html,body{
+html, body{
   width:100%;
   height:100%;
   margin:0;
@@ -47,6 +46,16 @@ body{
   padding:12px;
 }
 
+/* Desktop centering */
+@media (min-width:768px){
+  .app{
+    max-width:420px;
+    margin:auto;
+    border-radius:16px;
+    box-shadow:0 10px 40px rgba(0,0,0,.25);
+  }
+}
+
 /* ================= TOP ================= */
 .top{
   display:flex;
@@ -60,11 +69,10 @@ body{
   padding:12px;
   border-radius:10px;
   border:1px solid var(--border);
-  color:var(--text);
-  caret-color:var(--text);
+  outline:none;
   white-space:nowrap;
   overflow-x:auto;
-  outline:none;
+  user-select:none;
 }
 
 .icon{
@@ -95,7 +103,6 @@ body{
   border-radius:8px;
   border:1px solid var(--border);
   background:var(--btn-op);
-  color:#ff5c5c;
 }
 
 /* ================= CONTROLS ================= */
@@ -115,7 +122,7 @@ body{
   flex:1;
 }
 
-/* ================= EDIT ================= */
+/* ================= EDIT ROW ================= */
 .edit-row{
   display:flex;
   gap:10px;
@@ -128,12 +135,8 @@ body{
   border-radius:12px;
   border:1px solid var(--border);
   background:var(--btn-op);
-  font-size:16px;
-}
-
-.backspace-btn{
-  color:#f3e5c7; /* cream */
-  font-weight:600;
+  opacity:1;
+  filter:none;
 }
 
 /* ================= KEYPAD ================= */
@@ -148,19 +151,12 @@ body{
   border-radius:12px;
   border:1px solid var(--border);
   background:var(--btn);
-  color:var(--text);
   font-size:18px;
+  user-select:none;
 }
 
-.op{
-  background:var(--btn-op);
-}
-
-.eq{
-  background:#ffffff;
-  color:#000000;
-  font-weight:600;
-}
+.op{ background:var(--btn-op); }
+.eq{ font-weight:600; }
 
 .bottom{
   grid-column:1/4;
@@ -170,36 +166,38 @@ body{
 }
 
 /* ================= INTERACTION ================= */
-.num:active,
-.op:active,
-.eq:active,
-.edit-row button:active,
-.history-clear:active{
+button:active{
   transform:scale(.94);
   box-shadow:0 0 14px rgba(0,0,0,.3);
 }
 
+/* =================================================
+   🔒 FINAL TEXT COLOR RULES — SINGLE SOURCE OF TRUTH
+   ================================================= */
 
-/* ================= DESKTOP & LARGE SCREENS ================= */
-@media (min-width: 768px) {
-  .app {
-    max-width: 420px;
-    margin: auto;
-    border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+/* LIGHT / NORMAL MODE */
+@media (prefers-color-scheme: light), (prefers-color-scheme: no-preference){
+  button{
+    color:#000000 !important;   /* BLACK */
+  }
+
+  .edit-row .backspace-btn{
+    color:#000000 !important;   /* BLACK (forced) */
   }
 }
 
-/* EXTRA LARGE SCREENS */
-@media (min-width: 1200px) {
-  .app {
-    max-width: 460px;
+/* DARK MODE */
+@media (prefers-color-scheme: dark){
+  button{
+    color:#ffffff !important;   /* WHITE */
+  }
+
+  .edit-row .backspace-btn{
+    color:#ffffff !important;   /* WHITE (forced) */
   }
 }
 
-
-/* Prevent text selection on buttons (desktop mouse) */
-button {
-  user-select: none;
-  -webkit-user-select: none;
+/* CLEAR BUTTON — ALWAYS RED */
+.edit-row button:last-child{
+  color:#ff3b3b !important;
 }
