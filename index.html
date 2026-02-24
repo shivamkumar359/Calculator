@@ -2,20 +2,35 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Professional Calculator</title>
 
-<link rel="stylesheet" href="style.css">
+<!-- FULL SCREEN VIEWPORT -->
+<meta name="viewport"
+      content="width=device-width, height=device-height,
+               initial-scale=1.0, viewport-fit=cover">
+
+<title>Calculator</title>
+
 <link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
 
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#2b2b2b" media="(prefers-color-scheme: dark)">
+
+<style>
+/* FULL SCREEN FALLBACK (in case CSS fails) */
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+</style>
 </head>
 
 <body>
+
 <div class="app">
 
-  <!-- TOP -->
+  <!-- TOP BAR -->
   <div class="top">
     <div
       id="display"
@@ -24,6 +39,7 @@
       inputmode="none"
       spellcheck="false"
     ></div>
+
     <div class="icon" onclick="toggleHistory()">🕘</div>
   </div>
 
@@ -47,28 +63,30 @@
 
   <!-- KEYPAD -->
   <div class="pad">
+
     <button class="num" onclick="insert('7')">7</button>
     <button class="num" onclick="insert('8')">8</button>
     <button class="num" onclick="insert('9')">9</button>
-    <button class="op" onclick="insert('/')">÷</button>
+    <button class="op"  onclick="insert('/')">÷</button>
 
     <button class="num" onclick="insert('4')">4</button>
     <button class="num" onclick="insert('5')">5</button>
     <button class="num" onclick="insert('6')">6</button>
-    <button class="op" onclick="insert('*')">×</button>
+    <button class="op"  onclick="insert('*')">×</button>
 
     <button class="num" onclick="insert('1')">1</button>
     <button class="num" onclick="insert('2')">2</button>
     <button class="num" onclick="insert('3')">3</button>
-    <button class="op" onclick="insert('-')">−</button>
+    <button class="op"  onclick="insert('-')">−</button>
 
     <div class="bottom">
       <button class="num" onclick="insert('.')">.</button>
       <button class="num" onclick="insert('0')">0</button>
-      <button class="eq" onclick="calculate()">=</button>
+      <button class="eq"  onclick="calculate()">=</button>
     </div>
 
     <button class="op" onclick="insert('+')">+</button>
+
   </div>
 </div>
 
@@ -85,13 +103,13 @@ function vibrate(){
   if (t && navigator.vibrate) navigator.vibrate(t);
 }
 
-/* ===== PREVENT ANDROID KEYBOARD ===== */
+/* ===== KEEP CURSOR, BLOCK KEYBOARD ===== */
 function keepFocusWithoutKeyboard(){
-  d.blur();   // kill IME
-  d.focus();  // restore caret only
+  d.blur();
+  d.focus();
 }
 
-/* ===== INPUT HANDLING ===== */
+/* ===== INPUT ===== */
 function insert(text){
   vibrate();
   keepFocusWithoutKeyboard();
@@ -149,7 +167,7 @@ function clearHistory(){
 /* ===== INIT ===== */
 renderHistory();
 
-/* ===== SERVICE WORKER (GITHUB PAGES SAFE) ===== */
+/* ===== SERVICE WORKER ===== */
 if ("serviceWorker" in navigator){
   navigator.serviceWorker.register("./sw.js");
 }
