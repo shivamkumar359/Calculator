@@ -1,11 +1,11 @@
-/* ================= ELEMENTS ================= */
+/* ================= ELEMENT REFERENCES ================= */
 const d = document.getElementById("display");
 const vibe = document.getElementById("vibe");
 const historyBox = document.getElementById("historyBox");
 const historyList = document.getElementById("historyList");
 
 /* ================= HARD BLOCK ALL KEYBOARD INPUT ================= */
-/* Blocks mobile, laptop, desktop, IME, shortcuts */
+/* This blocks mobile keyboards, laptop keyboards, IME, paste, shortcuts */
 [
   "keydown",
   "keypress",
@@ -21,14 +21,16 @@ const historyList = document.getElementById("historyList");
   }, true);
 });
 
-/* ================= HAPTIC ================= */
+/* ================= HAPTIC FEEDBACK ================= */
 function vibrate() {
-  const t = +vibe.value;
-  if (t && navigator.vibrate) navigator.vibrate(t);
+  const strength = +vibe.value;
+  if (strength && navigator.vibrate) {
+    navigator.vibrate(strength);
+  }
 }
 
-/* ================= BUTTON INPUT ONLY ================= */
-/* No focus, no cursor, no keyboard — append-only */
+/* ================= BUTTON-ONLY INPUT ================= */
+/* No focus, no keyboard, append-only */
 
 function insert(char) {
   vibrate();
@@ -51,7 +53,7 @@ function calculate() {
   try {
     const exp = d.textContent;
 
-    /* Final safety check */
+    /* Strict safety validation */
     if (!/^[0-9+\-*/. ]+$/.test(exp)) return;
     if (!exp.trim()) return;
 
@@ -70,15 +72,17 @@ function toggleHistory() {
 }
 
 function saveHistory(entry) {
-  let h = JSON.parse(localStorage.getItem("calcHistory") || "[]");
-  h.unshift(entry);
-  localStorage.setItem("calcHistory", JSON.stringify(h.slice(0, 10)));
+  let history = JSON.parse(localStorage.getItem("calcHistory") || "[]");
+  history.unshift(entry);
+  localStorage.setItem("calcHistory", JSON.stringify(history.slice(0, 10)));
   renderHistory();
 }
 
 function renderHistory() {
-  const h = JSON.parse(localStorage.getItem("calcHistory") || "[]");
-  historyList.innerHTML = h.length ? h.join("<br>") : "No history";
+  const history = JSON.parse(localStorage.getItem("calcHistory") || "[]");
+  historyList.innerHTML = history.length
+    ? history.join("<br>")
+    : "No history";
 }
 
 function clearHistory() {
