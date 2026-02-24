@@ -7,7 +7,7 @@
   --border:#cccccc;
 }
 
-/* DARK MODE VARIABLES */
+/* DARK MODE */
 @media (prefers-color-scheme: dark){
   :root{
     --bg:#2b2b2b;
@@ -69,12 +69,10 @@ body{
   padding:12px;
   border-radius:10px;
   border:1px solid var(--border);
-  outline:none;
   white-space:nowrap;
   overflow-x:auto;
   user-select:none;
-  -webkit-user-select:none;
-  pointer-events:none; /* prevents keyboard focus */
+  pointer-events:none; /* prevent keyboard */
 }
 
 .icon{
@@ -153,7 +151,6 @@ body{
   background:var(--btn);
   font-size:18px;
   user-select:none;
-  -webkit-user-select:none;
 }
 
 .op{ background:var(--btn-op); }
@@ -166,31 +163,31 @@ body{
   gap:10px;
 }
 
-/* ================= INTERACTION ================= */
+/* ================= GLOW / PRESS EFFECT (PRESERVED) ================= */
 button:active{
   transform:scale(.94);
-  box-shadow:0 0 14px rgba(0,0,0,.3);
+  box-shadow:
+    0 0 6px rgba(0,0,0,.25),
+    0 0 14px rgba(0,0,0,.35);
 }
 
-/* =================================================
-   🔒 FINAL TEXT COLOR RULES — SINGLE SOURCE OF TRUTH
-   ================================================= */
+/* ================= FINAL TEXT COLOR RULES ================= */
 
-/* LIGHT / NORMAL MODE → ALL BUTTON TEXT BLACK */
+/* LIGHT MODE → BLACK TEXT */
 @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference){
   button{
-    color:#000000 !important;
+    color:#000000;
   }
 }
 
-/* DARK MODE → ALL BUTTON TEXT WHITE */
+/* DARK MODE → WHITE TEXT */
 @media (prefers-color-scheme: dark){
   button{
-    color:#ffffff !important;
+    color:#ffffff;
   }
 }
 
-/* CLEAR BUTTON — ALWAYS RED */
+/* CLEAR BUTTON → ALWAYS RED */
 .edit-row button:last-child{
   color:#ff3b3b !important;
 }
