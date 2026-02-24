@@ -1,8 +1,14 @@
+const CACHE = "calc-cache-v1";
+const ASSETS = [
+  "./",
+  "./index.html",
+  "./style.css",
+  "./manifest.json"
+];
+
 self.addEventListener("install", e => {
   e.waitUntil(
-    caches.open("calc-cache").then(cache =>
-      cache.addAll(["./","./index.html","./styles.css","./manifest.json"])
-    )
+    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
   );
 });
 
