@@ -1,4 +1,4 @@
-/* ================= THEME ================= */
+/* ================= THEME VARIABLES ================= */
 :root{
   --bg:#ffffff;
   --panel:#f4f4f4;
@@ -73,6 +73,8 @@ body{
   white-space:nowrap;
   overflow-x:auto;
   user-select:none;
+  -webkit-user-select:none;
+  pointer-events:none; /* prevents keyboard focus */
 }
 
 .icon{
@@ -135,8 +137,6 @@ body{
   border-radius:12px;
   border:1px solid var(--border);
   background:var(--btn-op);
-  opacity:1;
-  filter:none;
 }
 
 /* ================= KEYPAD ================= */
@@ -153,6 +153,7 @@ body{
   background:var(--btn);
   font-size:18px;
   user-select:none;
+  -webkit-user-select:none;
 }
 
 .op{ background:var(--btn-op); }
@@ -175,34 +176,21 @@ button:active{
    🔒 FINAL TEXT COLOR RULES — SINGLE SOURCE OF TRUTH
    ================================================= */
 
-/* LIGHT / NORMAL MODE */
+/* LIGHT / NORMAL MODE → ALL BUTTON TEXT BLACK */
 @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference){
   button{
-    color:#000000 !important;   /* BLACK */
-  }
-
-  .edit-row .backspace-btn{
-    color:#000000 !important;   /* BLACK (forced) */
+    color:#000000 !important;
   }
 }
 
-/* DARK MODE */
+/* DARK MODE → ALL BUTTON TEXT WHITE */
 @media (prefers-color-scheme: dark){
   button{
-    color:#ffffff !important;   /* WHITE */
-  }
-
-  .edit-row .backspace-btn{
-    color:#ffffff !important;   /* WHITE (forced) */
+    color:#ffffff !important;
   }
 }
 
 /* CLEAR BUTTON — ALWAYS RED */
 .edit-row button:last-child{
   color:#ff3b3b !important;
-}
-
-/* ===== ABSOLUTE KEYBOARD PREVENTION ===== */
-.display {
-  pointer-events: none;   /* touch cannot focus it */
 }
