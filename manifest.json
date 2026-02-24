@@ -1,0 +1,8 @@
+{
+  "name": "Professional Calculator",
+  "short_name": "Calculator",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff"
+}
