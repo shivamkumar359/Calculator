@@ -3,34 +3,24 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- FULL SCREEN VIEWPORT -->
 <meta name="viewport"
       content="width=device-width, height=device-height,
                initial-scale=1.0, viewport-fit=cover">
 
 <title>Calculator</title>
 
-<link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
 
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#2b2b2b" media="(prefers-color-scheme: dark)">
-
-<style>
-/* FULL SCREEN FALLBACK (in case CSS fails) */
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-}
-</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <!-- TOP BAR -->
+  <!-- TOP -->
   <div class="top">
     <div
       id="display"
@@ -39,7 +29,6 @@ html, body {
       inputmode="none"
       spellcheck="false"
     ></div>
-
     <div class="icon" onclick="toggleHistory()">🕘</div>
   </div>
 
@@ -49,13 +38,13 @@ html, body {
     <button class="history-clear" onclick="clearHistory()">Clear History</button>
   </div>
 
-  <!-- HAPTIC CONTROL -->
+  <!-- HAPTIC -->
   <div class="controls">
     <label>Haptic</label>
     <input type="range" min="0" max="50" value="20" id="vibe">
   </div>
 
-  <!-- EDIT CONTROLS -->
+  <!-- EDIT -->
   <div class="edit-row">
     <button class="backspace-btn" onclick="backspace()">⌫</button>
     <button onclick="clearAll()">C</button>
@@ -91,27 +80,14 @@ html, body {
 </div>
 
 <script>
-
-  /* ================= KEYBOARD SUPPORT (DESKTOP) ================= */
-document.addEventListener("keydown", e => {
-  if (e.key >= "0" && e.key <= "9") insert(e.key);
-  if (["+","-","*","/","."].includes(e.key)) insert(e.key);
-  if (e.key === "Enter") {
-    e.preventDefault();
-    calculate();
-  }
-  if (e.key === "Backspace") {
-    e.preventDefault();
-    backspace();
-  }
-  if (e.key === "Escape") clearAll();
-});
-
 /* ===== ELEMENTS ===== */
 const d = document.getElementById("display");
 const vibe = document.getElementById("vibe");
 const historyBox = document.getElementById("historyBox");
 const historyList = document.getElementById("historyList");
+
+/* ===== ALLOWED INPUT ===== */
+const ALLOWED = "0123456789+-*/.";
 
 /* ===== HAPTIC ===== */
 function vibrate(){
@@ -119,22 +95,23 @@ function vibrate(){
   if (t && navigator.vibrate) navigator.vibrate(t);
 }
 
-/* ===== KEEP CURSOR, BLOCK KEYBOARD ===== */
-function keepFocusWithoutKeyboard(){
+/* ===== PREVENT ANDROID KEYBOARD ===== */
+function keepFocus(){
   d.blur();
   d.focus();
 }
 
-/* ===== INPUT ===== */
-function insert(text){
+/* ===== SAFE INPUT ===== */
+function insert(t){
+  if (!ALLOWED.includes(t)) return;
   vibrate();
-  keepFocusWithoutKeyboard();
-  document.execCommand("insertText", false, text);
+  keepFocus();
+  document.execCommand("insertText", false, t);
 }
 
 function backspace(){
   vibrate();
-  keepFocusWithoutKeyboard();
+  keepFocus();
   document.execCommand("delete");
 }
 
@@ -148,6 +125,10 @@ function calculate(){
   vibrate();
   try{
     const exp = d.textContent;
+    if (!/^[0-9+\-*/. ]+$/.test(exp)) {
+      d.textContent = "Error";
+      return;
+    }
     if (!exp.trim()) return;
     const result = eval(exp);
     saveHistory(`${exp} = ${result}`);
@@ -156,6 +137,18 @@ function calculate(){
     d.textContent = "Error";
   }
 }
+
+/* ===== BLOCK TEXT & PASTE ===== */
+d.addEventListener("keydown", e => e.preventDefault());
+d.addEventListener("paste", e => e.preventDefault());
+
+/* ===== DESKTOP KEYBOARD ===== */
+document.addEventListener("keydown", e => {
+  if (ALLOWED.includes(e.key)) insert(e.key);
+  if (e.key === "Enter") calculate();
+  if (e.key === "Backspace") backspace();
+  if (e.key === "Escape") clearAll();
+});
 
 /* ===== HISTORY ===== */
 function toggleHistory(){
@@ -180,11 +173,10 @@ function clearHistory(){
   renderHistory();
 }
 
-/* ===== INIT ===== */
 renderHistory();
 
 /* ===== SERVICE WORKER ===== */
-if ("serviceWorker" in navigator){
+if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("./sw.js");
 }
 </script>
