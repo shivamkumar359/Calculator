@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Professional Calculator</title>
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="style.css">
 <link rel="manifest" href="manifest.json">
 
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
@@ -15,26 +15,37 @@
 <body>
 <div class="app">
 
+  <!-- TOP -->
   <div class="top">
-    <div id="display" class="display" contenteditable="true"></div>
+    <div
+      id="display"
+      class="display"
+      contenteditable="true"
+      inputmode="none"
+      spellcheck="false"
+    ></div>
     <div class="icon" onclick="toggleHistory()">🕘</div>
   </div>
 
+  <!-- HISTORY -->
   <div class="history" id="historyBox">
     <div id="historyList"></div>
     <button class="history-clear" onclick="clearHistory()">Clear History</button>
   </div>
 
+  <!-- HAPTIC CONTROL -->
   <div class="controls">
     <label>Haptic</label>
     <input type="range" min="0" max="50" value="20" id="vibe">
   </div>
 
+  <!-- EDIT CONTROLS -->
   <div class="edit-row">
     <button class="backspace-btn" onclick="backspace()">⌫</button>
     <button onclick="clearAll()">C</button>
   </div>
 
+  <!-- KEYPAD -->
   <div class="pad">
     <button class="num" onclick="insert('7')">7</button>
     <button class="num" onclick="insert('8')">8</button>
@@ -62,25 +73,34 @@
 </div>
 
 <script>
+/* ===== ELEMENTS ===== */
 const d = document.getElementById("display");
 const vibe = document.getElementById("vibe");
 const historyBox = document.getElementById("historyBox");
 const historyList = document.getElementById("historyList");
 
+/* ===== HAPTIC ===== */
 function vibrate(){
   const t = +vibe.value;
-  if (t) navigator.vibrate?.(t);
+  if (t && navigator.vibrate) navigator.vibrate(t);
 }
 
-function insert(t){
+/* ===== PREVENT ANDROID KEYBOARD ===== */
+function keepFocusWithoutKeyboard(){
+  d.blur();   // kill IME
+  d.focus();  // restore caret only
+}
+
+/* ===== INPUT HANDLING ===== */
+function insert(text){
   vibrate();
-  d.focus();
-  document.execCommand("insertText", false, t);
+  keepFocusWithoutKeyboard();
+  document.execCommand("insertText", false, text);
 }
 
 function backspace(){
   vibrate();
-  d.focus();
+  keepFocusWithoutKeyboard();
   document.execCommand("delete");
 }
 
@@ -89,18 +109,21 @@ function clearAll(){
   d.textContent = "";
 }
 
+/* ===== CALCULATE ===== */
 function calculate(){
   vibrate();
   try{
     const exp = d.textContent;
-    const res = eval(exp);
-    saveHistory(`${exp} = ${res}`);
-    d.textContent = res;
+    if (!exp.trim()) return;
+    const result = eval(exp);
+    saveHistory(`${exp} = ${result}`);
+    d.textContent = result;
   } catch {
     d.textContent = "Error";
   }
 }
 
+/* ===== HISTORY ===== */
 function toggleHistory(){
   historyBox.style.display =
     historyBox.style.display === "block" ? "none" : "block";
@@ -123,11 +146,14 @@ function clearHistory(){
   renderHistory();
 }
 
+/* ===== INIT ===== */
 renderHistory();
 
+/* ===== SERVICE WORKER (GITHUB PAGES SAFE) ===== */
 if ("serviceWorker" in navigator){
-  navigator.serviceWorker.register("sw.js");
+  navigator.serviceWorker.register("./sw.js");
 }
 </script>
+
 </body>
 </html>
