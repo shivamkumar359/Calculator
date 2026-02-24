@@ -128,3 +128,15 @@ body{
   grid-template-columns:1fr 1fr 1fr;
   gap:10px;
 }
+
+
+/* Backspace button visibility fix */
+.backspace-btn {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.backspace-btn:active {
+  box-shadow: 0 0 12px var(--text);
+}
