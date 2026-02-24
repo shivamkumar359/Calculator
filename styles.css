@@ -178,3 +178,28 @@ body{
   transform:scale(.94);
   box-shadow:0 0 14px rgba(0,0,0,.3);
 }
+
+
+/* ================= DESKTOP & LARGE SCREENS ================= */
+@media (min-width: 768px) {
+  .app {
+    max-width: 420px;
+    margin: auto;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  }
+}
+
+/* EXTRA LARGE SCREENS */
+@media (min-width: 1200px) {
+  .app {
+    max-width: 460px;
+  }
+}
+
+
+/* Prevent text selection on buttons (desktop mouse) */
+button {
+  user-select: none;
+  -webkit-user-select: none;
+}
