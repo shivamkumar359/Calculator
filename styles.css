@@ -201,3 +201,8 @@ button:active{
 .edit-row button:last-child{
   color:#ff3b3b !important;
 }
+
+/* ===== ABSOLUTE KEYBOARD PREVENTION ===== */
+.display {
+  pointer-events: none;   /* touch cannot focus it */
+}
