@@ -91,6 +91,22 @@ html, body {
 </div>
 
 <script>
+
+  /* ================= KEYBOARD SUPPORT (DESKTOP) ================= */
+document.addEventListener("keydown", e => {
+  if (e.key >= "0" && e.key <= "9") insert(e.key);
+  if (["+","-","*","/","."].includes(e.key)) insert(e.key);
+  if (e.key === "Enter") {
+    e.preventDefault();
+    calculate();
+  }
+  if (e.key === "Backspace") {
+    e.preventDefault();
+    backspace();
+  }
+  if (e.key === "Escape") clearAll();
+});
+
 /* ===== ELEMENTS ===== */
 const d = document.getElementById("display");
 const vibe = document.getElementById("vibe");
